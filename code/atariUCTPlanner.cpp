@@ -1,15 +1,7 @@
 #include "atari.hpp"
 #include <gflags/gflags.h>
-//#define STRIP_FLAG_HELP 1
-// test case 1 deterministic property (done)
-// test case 2 tree structure (done)
-// test case 3 real game play (done)
-// test case 4 pseudo death (done)
-// test case 5 visualize (done)
-// new function: cut branches --> test (done)
-// new function: actDiffer --> test (done)
 
-DEFINE_string(rom_path, "/home/svu/e0046667/pong.bin", "Game Rom File");
+DEFINE_string(rom_path, "/home/svu/e0046667/atari_uct_cluster/pong.bin", "Game Rom File");
 DEFINE_int32(num_traj, 500, "Sample trajectory numbers");
 DEFINE_int32(depth, 300, "Planning depth");
 DEFINE_double(ucb, 0.1, "Planning scalar");

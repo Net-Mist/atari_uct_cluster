@@ -78,7 +78,7 @@ public:
         actSet_ = ale_->getMinimalActionSet();
         minReward_ = ale_->minReward();
         maxReward_ = ale_->maxReward();
-        frameBuffer_ = new FrameBuffer(4);
+        frameBuffer_ = new FrameBuffer(1);
         lifeLost_ = false;
 
         for (int i = 0; i < actSet_.size(); ++i) {
@@ -205,9 +205,6 @@ public:
         const AtariAction *other = dynamic_cast<const AtariAction *>(action);
         ale::Action act = other->act_;
 
-        //TODO important : il y a peut-être un décalage de numero entre le mappage des actions au niveau du UCT et de
-        // l'Atari... A creuser si ça merde du genre violent.... voir le readme pour les vrais numéros ^^
-        // int action_number = act_map[act];
         int action_number = act;
 
         // generate the database

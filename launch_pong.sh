@@ -14,6 +14,6 @@ do
     cd atari_uct_cluster/code/build
     bsub -q serial -o outfile -e errorfile ./atari_uct -save_path=/hpctmp2/e0046667/output$i/
     
-    sleep 2
+    sleep 1
 done
 
