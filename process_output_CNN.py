@@ -31,6 +31,7 @@ for k in range(first_simu, last_simu + 1):
 
     i = 0
     for action_dir in action_dirs:
+        print(i)
         image_paths = glob.glob(action_dir + '/*')
         image_paths.sort()
         for image_path in image_paths:
@@ -53,8 +54,8 @@ for k in range(first_simu, last_simu + 1):
             # and save the action
             image_index_to_action_index[frame_number - 1] = i
         i += 1
-
-    np.savez(output_dir + 'data' + str(k), images=images,
+    print('save')
+    np.savez(output_dir + '/CNN/data' + str(k), images=images,
              image_index_to_action_index=image_index_to_action_index,
              nb_frames=nb_frames)
 print("total :",total_amount_data)
