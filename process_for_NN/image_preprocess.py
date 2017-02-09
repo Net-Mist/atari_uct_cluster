@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 
 # Size of the bare = 16
 # Size of the ball = 4*2
@@ -28,41 +29,25 @@ def fill_position_distribution_2d(array_to_fill, initial_array, special_color):
     return
 
 
-def print_grid(ball_position_distribution, player_position_distribution, opponent_position_distribution):
-    for i in range(number_blocks):
-        for j in range(number_blocks):
-            if ball_position_distribution[i, j] != 0:
-                print(ball_position_distribution[i, j], end='')
-            elif j == 0 and opponent_position_distribution[i] != 0:
-                print(opponent_position_distribution[i], end='')
-            elif j == number_blocks - 1 and player_position_distribution[i] != 0:
-                print(player_position_distribution[i], end='')
-            else:
-                print(".", end='')
-        print()
-
-
 def process(image):
+    # Prepare data
     ball_area = image.crop((0, 34, 160, 194))  # Size : 160 * 160
     opponent_area = image.crop((17, 34, 18, 194))  # Size : 1 * 160
     player_area = image.crop((141, 34, 142, 194))  # Size : 1 * 160
-
     player_distribution = np.zeros(160, dtype='B')
     opponent_distribution = np.zeros(160, dtype='B')
     ball_distribution = np.zeros((160, 160), dtype='B')
+    
     # Find the positions distributions
     fill_position_distribution_1d(player_distribution, np.array(player_area)[:, 0, :], mean_player)
     fill_position_distribution_1d(opponent_distribution, np.array(opponent_area)[:, 0, :], mean_opponent)
     fill_position_distribution_2d(ball_distribution, np.array(ball_area), mean_ball)
 
     # Find the positions
-    # y_player = np.argmax(player_distribution)
-    # y_opponent = np.argmax(opponent_distribution)
-    # y_b = np.argmax(np.sum(ball_distribution, 1))
-    # x_b = np.argmax(np.sum(ball_distribution, 0))
-    # return y_player, y_opponent, x_b, y_b, player_distribution, opponent_distribution, ball_distribution
+    y_b = np.argmax(np.sum(ball_distribution, 1))
+    x_b = np.argmax(np.sum(ball_distribution, 0))
     
-    return player_distribution, opponent_distribution, ball_distribution
+    return x_b, y_b, player_distribution, opponent_distribution
     
     
     

@@ -3,10 +3,10 @@ from PIL import Image
 import glob
 import time
 import sys
+from image_preprocess import *
 
 output_dir = '/hpctmp2/e0046667/'
 data = []
-total_amount_data = 0
 
 first_simu = int(sys.argv[1])
 last_simu = int(sys.argv[2])
@@ -22,11 +22,11 @@ for k in range(first_simu, last_simu + 1):
     nb_frames = 0
     for action_dir in action_dirs:
         nb_frames += len(glob.glob(action_dir + '/*'))
-    print(nb_frames, "frames")
-    total_amount_data += nb_frames
+    print("k = ",k,", ",nb_frames, "frames")
 
-    images = np.zeros((nb_frames, 84, 84, 4), dtype='b')
-    image_index_to_action_index = np.zeros(nb_frames, dtype='b')
+    # Prepare the storage of the data
+    states = np.zeros((nb_frames, 4 + 2 * 160), dtype='B')
+    state_index_to_action_index = np.zeros(nb_frames, dtype='B')
     nb_frames = np.array([nb_frames])
 
     i = 0
@@ -36,27 +36,24 @@ for k in range(first_simu, last_simu + 1):
         image_paths.sort()
         for image_path in image_paths:
             # Prepare the image
-            image = Image.open(image_path).convert('L')
-            image = image.crop((0, 34, 160, 194))
-            image = image.resize((84, 84))
-            image = np.array(image, dtype='b')
+            image = Image.open(image_path)
+            x_b, y_b, player_distribution, opponent_distribution = process(image)
 
-            # Save the image in 4 buffer
+            # Save the data
             frame_number = int(image_path.split('/')[-1][:-4])
-            images[frame_number - 1, :, :, 0] = image
+            states[frame_number - 1, 0] = x_b
+            states[frame_number - 1, 1] = y_b
             if frame_number < nb_frames:
-                images[frame_number, :, :, 1] = image
-            if frame_number + 1 < nb_frames:
-                images[frame_number + 1, :, :, 2] = image
-            if frame_number + 2 < nb_frames:
-                images[frame_number + 2, :, :, 3] = image
-
+                states[frame_number, 2] = x_b
+                states[frame_number, 3] = y_b
+            states[frame_number - 1, 4:163] = player_distribution
+            states[frame_number - 1, 163:] = opponent_distribution
+                
             # and save the action
             image_index_to_action_index[frame_number - 1] = i
         i += 1
     print('save')
-    np.savez(output_dir + 'VIN/data' + str(k), images=images,
+    np.savez(output_dir + 'VIN/data' + str(k), states=states,
              image_index_to_action_index=image_index_to_action_index,
              nb_frames=nb_frames)
-print("total :",total_amount_data)
 
