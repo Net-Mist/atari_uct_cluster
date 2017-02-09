@@ -50,10 +50,10 @@ for k in range(first_simu, last_simu + 1):
             states[frame_number - 1, 164:] = opponent_distribution
                 
             # and save the action
-            image_index_to_action_index[frame_number - 1] = i
+            state_index_to_action_index[frame_number - 1] = i
         i += 1
     print('save')
     np.savez(output_dir + 'VIN/data' + str(k), states=states,
-             image_index_to_action_index=image_index_to_action_index,
+             state_index_to_action_index=state_index_to_action_index,
              nb_frames=nb_frames)
 
