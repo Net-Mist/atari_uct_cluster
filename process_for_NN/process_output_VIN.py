@@ -46,8 +46,8 @@ for k in range(first_simu, last_simu + 1):
             if frame_number < nb_frames:
                 states[frame_number, 2] = x_b
                 states[frame_number, 3] = y_b
-            states[frame_number - 1, 4:163] = player_distribution
-            states[frame_number - 1, 163:] = opponent_distribution
+            states[frame_number - 1, 4:164] = player_distribution
+            states[frame_number - 1, 164:] = opponent_distribution
                 
             # and save the action
             image_index_to_action_index[frame_number - 1] = i
