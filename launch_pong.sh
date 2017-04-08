@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in `seq 36 800`;
+for i in `seq 1 800`;
 do
     echo $i
 
